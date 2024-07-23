@@ -59,9 +59,9 @@ Rails.application.configure do
   # Use a different cache store in production.
   # config.cache_store = :mem_cache_store
 
-  # Use a real queuing backend for Active Job (and separate queues per environment).
-  # config.active_job.queue_adapter = :resque
-  # config.active_job.queue_name_prefix = "user_management_production"
+  # Use a real queuing backend for Active Job.
+  config.active_job.queue_adapter = :sidekiq
+  config.active_job.queue_name_prefix = nil # Not supported by sidekiq
 
   # Enable locale fallbacks for I18n (makes lookups for any locale fall back to
   # the I18n.default_locale when a translation cannot be found).

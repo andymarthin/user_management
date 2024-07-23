@@ -24,3 +24,7 @@ group :development do
   gem "annotate"
   gem "web-console"
 end
+
+group :production do
+  gem "sidekiq", "~> 7.0"
+end

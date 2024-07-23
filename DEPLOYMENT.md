@@ -4,6 +4,7 @@
 
 These environment variables affect how the app functions when deployed in production.
 
+- `SIDEKIQ_CONCURRENCY` - Number of threads used per Sidekiq process (default: 5)
 - `RAILS_DISABLE_SSL` - Disable HSTS and secure cookies
 - `RAILS_ENV` **REQUIRED** - "production"
 - `RAILS_MAX_THREADS` - Number of threads per Puma process (default: 5)
