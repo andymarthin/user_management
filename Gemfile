@@ -1,6 +1,6 @@
 source "https://rubygems.org"
 
-ruby file: ".ruby-version"
+ruby '3.2.3'
 
 gem "rails", "~> 7.1.3", ">= 7.1.3.4"
 gem "sprockets-rails"
@@ -12,8 +12,14 @@ gem "stimulus-rails"
 gem "cssbundling-rails"
 gem "tzinfo-data", platforms: %i[ windows jruby ]
 gem "bootsnap", require: false
+gem 'activerecord-import'
+gem "pagy"
+gem "shrine"
+gem "aws-sdk-s3", "~> 1.156"
+
 
 group :development, :test do
+  gem "faker"
   gem "factory_bot_rails"
   gem "dotenv", ">= 3.0"
   gem "rspec-rails"
@@ -25,6 +31,4 @@ group :development do
   gem "web-console"
 end
 
-group :production do
   gem "sidekiq", "~> 7.0"
-end

@@ -81,4 +81,5 @@ production:
   <<: *default
   database: user_management_production
   username: user_management
-  password: <%= ENV["USER_MANAGEMENT_DATABASE_PASSWORD"] %>
+  password: <%= ENV["POSTGRES_PASSWORD"] %>
+  host: <%= ENV["DB_HOST"] %>
