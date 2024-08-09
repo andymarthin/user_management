@@ -8,13 +8,13 @@ image: marthin/user_management
 servers:
   web:
     hosts:
-      - 178.128.59.169
+      - 206.189.158.127
     labels:
-      traefik.http.routers.imagebinary.rule: Host(`user-management.marthin.web.id`)
-      traefik.http.routers.imagebinary_secure.entrypoints: websecure
-      traefik.http.routers.imagebinary_secure.rule: Host(`user-management.marthin.web.id`)
-      traefik.http.routers.imagebinary_secure.tls: true
-      traefik.http.routers.imagebinary_secure.tls.certresolver: letsencrypt
+      traefik.http.routers.marthin.rule: Host(`kamal5.marthin.web.id`)
+      traefik.http.routers.marthin_secure.entrypoints: websecure
+      traefik.http.routers.marthin_secure.rule: Host(`kamal5.marthin.web.id`)
+      traefik.http.routers.marthin_secure.tls: true
+      traefik.http.routers.marthin_secure.tls.certresolver: letsencrypt
     options:
       network: "private"
 # Credentials for your image host.
@@ -33,12 +33,13 @@ registry:
 # Remember to run `kamal env push` after making changes!
 env:
    clear:
-      DB_HOST: 178.128.59.169
-      HOSTNAME: user-management.marthin.web.id
+      DB_HOST: user-management-db
+      HOSTNAME: kamal4.marthin.web.id
       RAILS_SERVE_STATIC_FILES: true
       RAILS_LOG_TO_STDOUT: true
    secret:
      - RAILS_MASTER_KEY
+     - POSTGRES_PASSWORD
 
 # Use a different ssh user than root
 # ssh:
@@ -60,20 +61,34 @@ traefik:
     publish:
       - "443:443"
     volume:
-      - "/letsencrypt/acme.json:/letsencrypt/acme.json"
+      - "/etc/letsencrypt/acme.json:/etc/letsencrypt/acme.json"
     network: "private"
+  labels:
+    traefik.enable: true
+    traefik.http.routers.api.service: api@internal
+    traefik.http.routers.api.entrypoints: websecure
+    traefik.http.routers.api.rule: Host(`traefik2.marthin.web.id`)
+    traefik.http.routers.api.tls: true
+    traefik.http.routers.api.middlewares: auth
+    traefik.http.middlewares.auth.basicauth.users: "admin:$apr1$grDv5EbV$LMK0GhPLtvxyl3A8jASqO/"
   args:
+    api.insecure: false
+    api.dashboard: true
     entryPoints.web.address: ":80"
+    entryPoints.web.http.redirections.entryPoint.to: websecure
+    entryPoints.web.http.redirections.entryPoint.scheme: https
+    entryPoints.web.http.redirections.entryPoint.permanent: true
     entryPoints.websecure.address: ":443"
     certificatesResolvers.letsencrypt.acme.email: "mail@marthin.web.id"
-    certificatesResolvers.letsencrypt.acme.storage: "/letsencrypt/acme.json"
+    certificatesResolvers.letsencrypt.acme.storage: "/etc/letsencrypt/acme.json"
     certificatesResolvers.letsencrypt.acme.httpchallenge: true
-    certificatesResolvers.letsencrypt.acme.httpchallenge.entrypoint: web
+    certificatesResolvers.letsencrypt.acme.httpchallenge.entrypoint: "web"
 
 accessories:
   db:
     image: postgres:15
-    host: 178.128.59.169
+    roles:
+      - web
     port: 5432
     env:
       clear:
@@ -85,11 +100,15 @@ accessories:
       - config/init.sql:/docker-entrypoint-initdb.d/setup.sql
     directories:
       - data:/var/lib/postgresql/data
+    options:
+      network: "private"
 
 # Configure a custom healthcheck (default is /up on port 3000)
-# healthcheck:
-#   path: /healthz
-#   port: 4000
+healthcheck:
+  path: /up
+  port: 3000
+  max_attempts: 10
+
 
 # Bridge fingerprinted assets, like JS and CSS, between versions to avoid
 # hitting 404 on in-flight requests. Combines all files from new and old

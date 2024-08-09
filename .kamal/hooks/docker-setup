@@ -1,0 +1,35 @@
+#!/bin/sh
+REMOTE_HOST="root@$KAMAL_HOSTS"
+NETWORK_NAME="private"
+FOLDER="/etc/letsencrypt"
+FILE="$FOLDER/acme.json"
+
+
+# SSH into the remote host and execute Docker commands
+ssh "$REMOTE_HOST" << EOF
+    # Check if the Docker network already exists
+    if ! docker network inspect "$NETWORK_NAME" &>/dev/null; then
+        # If it doesn't exist, create it
+        docker network create "$NETWORK_NAME"
+        echo "Created Docker network: $NETWORK_NAME"
+    else
+        echo "Docker network $NETWORK_NAME already exists, skipping creation."
+    fi
+
+
+    if [ ! -d "$FOLDER" ]; then
+      mkdir -p "$FOLDER"
+      echo "Created directory $FOLDER"
+    fi
+
+
+    if [ ! -f "$FILE" ]; then
+        mkdir -p /etc/letsencrypt
+        touch "$FILE"
+        chmod 600 "$FILE"
+        echo "Created $FILE with permissions 600"
+    else
+        echo "$FILE already exists"
+    fi
+
+EOF
