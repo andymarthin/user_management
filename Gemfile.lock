@@ -252,6 +252,8 @@ GEM
       logger
       rack (>= 2.2.4)
       redis-client (>= 0.22.2)
+    sidekiq-batch (0.2.0)
+      sidekiq (>= 7, < 8)
     sprockets (4.2.1)
       concurrent-ruby (~> 1.0)
       rack (>= 2.2.4, < 4)
@@ -307,6 +309,7 @@ DEPENDENCIES
   rspec-rails
   shrine
   sidekiq (~> 7.0)
+  sidekiq-batch
   sprockets-rails
   stimulus-rails
   turbo-rails

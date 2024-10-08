@@ -7,7 +7,8 @@ s3 = Shrine::Storage::S3.new(
   region: 'us-east-1', # required
   access_key_id: 'xaisua34X7BDlWTHVapf',
   secret_access_key: 'Pdtm8Ig3lp3U4ZKtEFdFUChNyM5BqjjMUmcuRmzr',
-  endpoint: 'http://localhost:9000/user-management/'
+  endpoint: 'http://localhost:9000',
+  force_path_style: true
 )
 Shrine.storages = {
   cache: Shrine::Storage::FileSystem.new('public', prefix: 'uploads/cache', directory_permissions: 0o755,

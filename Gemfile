@@ -16,6 +16,8 @@ gem 'activerecord-import'
 gem "pagy"
 gem "shrine"
 gem "aws-sdk-s3", "~> 1.156"
+gem 'sidekiq-batch'
+
 
 
 group :development, :test do
